@@ -1,21 +1,27 @@
-import { response, Router } from "express";
-const { v4: uuidv4 } = require('uuid');
-const roulesRoutes = Router()
+import { Router } from "express";
+import { RoleRepository } from "../../repositories/RoleRepositores"
 
-const roles = []
+
+const roulesRoutes = Router()
+const roleRepository = new RoleRepository()
+
 
 roulesRoutes.post('/', (request, response)  =>{
     const { name } = request.body
+    
+    const roleAleadyExists = roleRepository.findByName(name)
 
-    const role = {
-        id: uuidv4(),
-        name,
-        created_at: new Date()
+    if (roleAleadyExists){
+        return response.status(400).json({ message: "Role aleady exists!"})
     }
-
-    roles.push(role)
+    const role = roleRepository.create({ name})
 
     return response.status(201).json(role)
+})
+
+roulesRoutes.get("/", (request, response) => {
+    const roles = roleRepository.findAll()
+    return response.json(roles)
 })
 
 export { roulesRoutes }
