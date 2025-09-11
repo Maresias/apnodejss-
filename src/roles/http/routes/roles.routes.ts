@@ -1,9 +1,8 @@
 import { Router } from "express";
-import { RoleRepository } from "../../repositories/RoleRepositores"
 import { createRoleController } from "../../useCases/createRole";
+import { listRolesController } from "@roles/useCases/listRoles";
 
 const roulesRoutes = Router()
-const roleRepository = new RoleRepository()
 
 
 roulesRoutes.post('/', (request, response)  =>{
@@ -12,7 +11,8 @@ roulesRoutes.post('/', (request, response)  =>{
 })
 
 roulesRoutes.get("/", (request, response) => {
-    const roles = roleRepository.findAll()
+    const roles = listRolesController.handles(request, response)
+    
     return response.json(roles)
 })
 
