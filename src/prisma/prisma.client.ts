@@ -1,5 +1,22 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+import { log } from 'console';
 
-module.exports = prisma;
+class PrismaService extends PrismaClient {
+    constructor(){
+        super({
+            log: ["warn", "error"],
+        })
+    }
+
+    async connect(){
+        return this.$connect()
+    }
+
+    async disconnect(){
+        return this.$disconnect() 
+    }
+}
+
+
+export const prisma = new PrismaService()
